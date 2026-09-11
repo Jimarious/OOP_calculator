@@ -9,6 +9,7 @@ def test_evaluate():
     result_control = (2 + 3) * (10 - 4)
     assert result_calculator == result_control
 
+
 """
 evaluate:
 +  -  *  x  /  ^
@@ -22,4 +23,13 @@ Number("hello")           -> error
 Number(float("inf"))      -> error
 BinaryOperation("%", ...) -> error
 BinaryOperation("+", 1, Number(2)) -> error
+"""
+
+"""
+while(1) {
+    # mathematical in, not python
+    if c in whitespace: continue
+    if c in {+,-,...}: list <- list + c
+    if c in int
+}
 """
