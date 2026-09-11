@@ -75,3 +75,4 @@ class BinaryOperation(Node):
 
 
 # TODO: Maybe make it so that properties have a use
+# TODO: Maybe find more edge cases for the original tests or automate them further
