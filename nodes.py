@@ -41,6 +41,7 @@ class Number(Node):
 
 class BinaryOperation(Node):
     def __init__(self, operator, node1, node2):
+        # I put the errors in checklist form:
         if not isinstance(node1, Node) or not isinstance(node2, Node):
             raise TypeError("Invalid Operand Type")
         if not isinstance(operator, str):
