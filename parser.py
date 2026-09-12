@@ -5,6 +5,8 @@ NUMBER = r"\d+(?:\.\d+)?"
 
 class Parser:
     def __init__(self, expression) -> None: # __init__ just configures self
+        if not isinstance(expression, str):
+            raise TypeError("expression must be string")
         self._tokens = re.findall(NUMBER + r"|[*x/+\-^()]|\S", expression)
         self._token_idx = 0
 
@@ -22,13 +24,14 @@ class Parser:
         # _parse_atom: +-*x/^ from 1st call or ( from 2nd through all
 
     def parse(self) -> Node:
-        # Just resets the same expression, for different one we can just instanciate new parser
+        # Just resets the same expression, for different one we can just instantiate new parser
         self._token_idx = 0
         if self._tokens is None:
-            raise ValueError()
-        self._parse_sum(self._tokens)
+            raise ValueError("expression is empty")
+        root = self._parse_sum(self._tokens)
         if self._peek() is not None:
             raise ValueError(f"expression contained {self._peek()!r}")
+        return root
 
     def _parse_sum(self) -> Node:
         self._parse_product()
@@ -42,12 +45,14 @@ class Parser:
         while (operator := self._peek) in ['*','/','x']:
             self._token_idx += 1
             node = BinaryOperation(operator, node, self._parse_power)
+        return node
 
     def _parse_power(self) -> Node:
         self._parse_atom()
         while (operator := self._peek) == '^':
             self._token_idx += 1
             node = BinaryOperation(operator, node, self._parse_atom)
+        return node
 
     def _parse_atom(self) -> Node:
         if (token := self._take()) == '(':
@@ -57,4 +62,4 @@ class Parser:
         else:
             if re.fullmatch(NUMBER, token):
                 return Number(float(token))
-            raise ValueError(f"expected number, got {token!r}")
+            raise ValueError(f"in expression expected number or (, got {token!r}")
