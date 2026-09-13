@@ -4,9 +4,8 @@ from nodes import Node, BinaryOperation, Number
 NUMBER = r"\d+(?:\.\d+)?"
 
 class Parser:
-    def __init__(self, expression) -> None: # __init__ just configures self
-        if not isinstance(expression, str):
-            raise TypeError("expression must be string")
+    # parser can only be used once, additional methods can change that
+    def __init__(self, expression) -> None: # __init__ just configures self => no rv
         self._tokens = re.findall(NUMBER + r"|[*x/+\-^()]|\S", expression)
         self._token_idx = 0
 
@@ -21,11 +20,9 @@ class Parser:
             self._token_idx += 1
             return token
         raise ValueError("expression ends in +,-,*,x,/,^ or (")
-        # _parse_atom: +-*x/^ from 1st call or ( from 2nd through all
+        # raised in _parse_atom: +-*x/^ from 1st call or ( from 2nd top down
 
     def parse(self) -> Node:
-        # Just resets the same expression, for different one we can just instantiate new parser
-        self._token_idx = 0
         if self._tokens is None:
             raise ValueError("expression is empty")
         root = self._parse_sum(self._tokens)

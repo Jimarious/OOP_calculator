@@ -27,21 +27,10 @@ class Number(Node):
     def evaluate(self):
         return self._value
 
-    def postfix(self):
-        return str(self._value)
-
-    def preorder(self):
-        return str(self._value)
-
-    # Won't use, demonstrate encapsulation / read-only attributes
-    @property
-    def value(self):
-        return self._value
-
 
 class BinaryOperation(Node):
     def __init__(self, operator, node1, node2):
-        # I put the errors in checklist form:
+        # errors in checklist form:
         if not isinstance(node1, Node) or not isinstance(node2, Node):
             raise TypeError("Invalid Operand Type")
         if not isinstance(operator, str):
@@ -67,16 +56,7 @@ class BinaryOperation(Node):
             case '^':
                 return left ** right
 
-    def postfix(self):
-        return " ".join([self.node1.postfix(), self._node2.postfix(), self._operator])
-
-    def preorder(self):
-        return " ".join([self._operator, self._node1.preorder(), self._node2.preorder()])
 
 
 
-# TODO: Build the tokenizer
-
-
-# TODO: Maybe make it so that properties have a use
 # TODO: Maybe find more edge cases for the original tests or automate them further
