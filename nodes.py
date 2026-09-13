@@ -6,14 +6,6 @@ class Node(ABC):
     def evaluate(self):
         pass
 
-    @abstractmethod
-    def postfix(self):
-        pass
-
-    @abstractmethod
-    def preorder(self):
-        pass
-
 class Number(Node):
     def __init__(self, value):
         # (bool is child of int)
@@ -30,13 +22,12 @@ class Number(Node):
 
 class BinaryOperation(Node):
     def __init__(self, operator, node1, node2):
-        # errors in checklist form:
         if not isinstance(node1, Node) or not isinstance(node2, Node):
             raise TypeError("Invalid Operand Type")
         if not isinstance(operator, str):
             raise TypeError("operator <- not a string")
-        if operator not in "+-*x/^" or len(operator) != 1:
-            raise ValueError("operator <- not +,-,*,x,/ or ^")
+        if operator not in "+-*/" or len(operator) != 1:
+            raise ValueError("operator <- not +,-,* or /")
         self._operator = operator
         self._node1 = node1
         self._node2 = node2
@@ -49,14 +40,7 @@ class BinaryOperation(Node):
                 return left + right
             case '-':
                 return left - right
-            case '*' | 'x':
+            case '*':
                 return left * right
             case '/':
                 return left / right
-            case '^':
-                return left ** right
-
-
-
-
-# TODO: Maybe find more edge cases for the original tests or automate them further
