@@ -1,11 +1,11 @@
-import re
-from nodes import Node, BinaryOperation, Number
+from re import findall, fullmatch
+from . import Node, Operation, Number
 
 NUMBER = r"\d+(?:\.\d+)?"
 
 class Parser:
     def __init__(self, expression):
-        self._tokens = re.findall(NUMBER + r"|[*/+\-()]|\S", expression)
+        self._tokens = findall(NUMBER + r"|[*/+\-()]|\S", expression)
         self._token_idx = 0
 
     def _peek(self):
@@ -33,14 +33,14 @@ class Parser:
         self._parse_product()
         while (operator := self._peek) in ['+','-']:
             self._token_idx += 1
-            node = BinaryOperation(operator, node, self._parse_product)
+            node = Operation(operator, node, self._parse_product)
         return node
 
     def _parse_product(self):
         self._parse_power()
         while (operator := self._peek) in ['*','/']:
             self._token_idx += 1
-            node = BinaryOperation(operator, node, self._parse_power)
+            node = Operation(operator, node, self._parse_power)
         return node
 
     def _parse_atom(self):
@@ -49,6 +49,6 @@ class Parser:
             if self.take() == ')': return node
             raise ValueError("expression missing closing )")
         else:
-            if re.fullmatch(NUMBER, token):
+            if fullmatch(NUMBER, token):
                 return Number(float(token))
             raise ValueError(f"in expression expected number or (, got {token!r}")

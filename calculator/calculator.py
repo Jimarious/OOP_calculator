@@ -1,4 +1,4 @@
-import 
+from . import Parser
 
 class Calculator:
     def __init__(self, expression):

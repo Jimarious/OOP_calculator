@@ -20,7 +20,7 @@ class Number(Node):
         return self._value
 
 
-class BinaryOperation(Node):
+class Operation(Node):
     def __init__(self, operator, node1, node2):
         if not isinstance(node1, Node) or not isinstance(node2, Node):
             raise TypeError("Invalid Operand Type")
