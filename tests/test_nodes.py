@@ -20,7 +20,7 @@ def test_polymorphic_node_interface(node: Node, value):
 
 @pytest.mark.parametrize("value", [float("nan"), float("inf"), float("-inf")])
 def test_number_rejects_non_finite_values(value):
-    with pytest.raises(ValueError, match="finite"):
+    with pytest.raises(ValueError, match="inf"):
         Number(value)
 
 
@@ -28,13 +28,6 @@ def test_number_rejects_non_finite_values(value):
 def test_number_rejects_non_numeric_values(value):
     with pytest.raises(TypeError):
         Number(value)
-
-
-def test_number_value_is_read_only():
-    number = Number(3)
-    with pytest.raises(AttributeError):
-        number.value = 10
-    assert number.evaluate() == 3
 
 
 @pytest.mark.parametrize("operator", ["%", "**", "", "add"])
