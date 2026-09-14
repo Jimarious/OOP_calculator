@@ -10,7 +10,7 @@ class Parser:
 
     def _peek(self):
         if self._token_idx < len(self._tokens):
-            return self._tokens[self._token_idx+1]
+            return self._tokens[self._token_idx]
         return None
 
     def _take(self):
@@ -30,14 +30,14 @@ class Parser:
         return root
 
     def _parse_sum(self):
-        self._parse_product()
+        node = self._parse_product()
         while (operator := self._peek) in ['+','-']:
             self._token_idx += 1
             node = Operation(operator, node, self._parse_product)
         return node
 
     def _parse_product(self):
-        self._parse_atom()
+        node = self._parse_atom()
         while (operator := self._peek) in ['*','/']:
             self._token_idx += 1
             node = Operation(operator, node, self._parse_atom)
