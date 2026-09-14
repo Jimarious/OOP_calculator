@@ -24,7 +24,7 @@ class Parser:
     def parse(self):
         if self._tokens is None:
             raise ValueError("expression is empty")
-        root = self._parse_sum(self._tokens)
+        root = self._parse_sum()
         if self._peek() is not None:
             raise ValueError(f"expression contained {self._peek()!r}")
         return root
@@ -37,10 +37,10 @@ class Parser:
         return node
 
     def _parse_product(self):
-        self._parse_power()
+        self._parse_atom()
         while (operator := self._peek) in ['*','/']:
             self._token_idx += 1
-            node = Operation(operator, node, self._parse_power)
+            node = Operation(operator, node, self._parse_atom)
         return node
 
     def _parse_atom(self):
