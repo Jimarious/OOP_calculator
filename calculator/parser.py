@@ -51,7 +51,7 @@ class Parser:
         print("_parse_atom     | token index:", self._token_idx, "| peek:", self._peek())
         if (token := self._take()) == '(':
             node = self._parse_sum()
-            if self.take() == ')': return node
+            if self._take() == ')': return node
             raise ValueError("expression missing closing )")
         else:
             if fullmatch(NUMBER, token):
