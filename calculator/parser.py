@@ -1,5 +1,5 @@
 from re import findall, fullmatch
-from . import Node, Operation, Number
+from .nodes import Node, Operation, Number
 
 NUMBER = r"\d+(?:\.\d+)?"
 
