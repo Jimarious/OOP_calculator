@@ -1,11 +1,12 @@
 from re import findall, fullmatch
-from .nodes import Node, Operation, Number
+from .nodes import _Node, _Operation, _Number
 
-NUMBER = r"\d+(?:\.\d+)?"
+FLOAT = r"\d+\.\d+"
+INT = r"\d+"
 
 class Parser:
     def __init__(self, expression):
-        self._tokens = findall(NUMBER + r"|[*/+\-()]|\S", expression)
+        self._tokens = findall(rf"{FLOAT}|{INT}|[*/+\-()]|\S", expression)
         self._token_idx = 0
 
     def _peek(self):
@@ -22,7 +23,8 @@ class Parser:
         # raised in _parse_atom: +-*/ from 1st call or ( from 2nd top down
 
     def parse(self):
-        if self._tokens is None:
+        print(self._tokens)
+        if self._peek() is None:
             raise ValueError("expression is empty")
         root = self._parse_sum()
         if self._peek() is not None:
@@ -36,7 +38,7 @@ class Parser:
         while (operator := self._peek()) in ['+','-']:
             self._token_idx += 1
             print("_parse_sum: just a peek 2", self._peek())
-            node = Operation(operator, node, self._parse_product())
+            node = _Operation(operator, node, self._parse_product())
         return node
 
     def _parse_product(self):
@@ -44,7 +46,7 @@ class Parser:
         node = self._parse_atom()
         while (operator := self._peek()) in ['*','/']:
             self._token_idx += 1
-            node = Operation(operator, node, self._parse_atom())
+            node = _Operation(operator, node, self._parse_atom())
         return node
 
     def _parse_atom(self):
@@ -54,6 +56,6 @@ class Parser:
             if self._take() == ')': return node
             raise ValueError("expression missing closing )")
         else:
-            if fullmatch(NUMBER, token):
-                return Number(float(token))
+            if fullmatch(FLOAT, token): return _Number(float(token))
+            if fullmatch(INT, token): return _Number(int(token))
             raise ValueError(f"in expression expected number or (, got {token!r}")

@@ -1,25 +1,25 @@
 from abc import ABC, abstractmethod
 import math
 
-class Node(ABC):
+class _Node(ABC):
     @abstractmethod
     def evaluate(self):
         pass
 
-class Number(Node):
+class _Number(_Node):
     def __init__(self, value):
         # Already handled by Parser, just to showcase isinstance
         # (bool is child of int)
         # type(value) not in {int, float}: would have removed the need to check for bool
         if not isinstance(value, (int, float)) or isinstance(value, bool):
-            raise TypeError("Number <- non numeric value")
+            raise TypeError("_Number <- non numeric value")
         self._value = value
 
     def evaluate(self):
         return self._value
 
 
-class Operation(Node):
+class _Operation(_Node):
     def __init__(self, operator, node1, node2):
         self._operator = operator
         self._node1 = node1
