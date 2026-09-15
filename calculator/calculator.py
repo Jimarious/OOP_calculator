@@ -1,4 +1,4 @@
-from .parser import Parser
+from .parser import _Parser
 
 class Calculator:
     def __init__(self, expression):
@@ -12,7 +12,7 @@ class Calculator:
     def expression(self, expression):
         if not isinstance(expression, str):
             raise TypeError("expression must be string")
-        self._root = Parser(expression).parse()
+        self._root = _Parser(expression).parse()
         self._expression = expression
 
     def calculate(self):
