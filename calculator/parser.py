@@ -23,7 +23,6 @@ class Parser:
         # raised in _parse_atom: +-*/ from 1st call or ( from 2nd top down
 
     def parse(self):
-        print(self._tokens)
         if self._peek() is None:
             raise ValueError("expression is empty")
         root = self._parse_sum()
@@ -32,17 +31,13 @@ class Parser:
         return root
 
     def _parse_sum(self):
-        print("_parse_sum     | token index:", self._token_idx, "| peek:", self._peek())
         node = self._parse_product()
-        print("_parse_sum: just a peek", self._peek())
         while (operator := self._peek()) in ['+','-']:
             self._token_idx += 1
-            print("_parse_sum: just a peek 2", self._peek())
             node = _Operation(operator, node, self._parse_product())
         return node
 
     def _parse_product(self):
-        print("_parse_product     | token index:", self._token_idx, "| peek:", self._peek())
         node = self._parse_atom()
         while (operator := self._peek()) in ['*','/']:
             self._token_idx += 1
@@ -50,7 +45,6 @@ class Parser:
         return node
 
     def _parse_atom(self):
-        print("_parse_atom     | token index:", self._token_idx, "| peek:", self._peek())
         if (token := self._take()) == '(':
             node = self._parse_sum()
             if self._take() == ')': return node
