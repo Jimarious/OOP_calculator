@@ -47,4 +47,4 @@ def test_failed_update_preserves_state(calculator):
     raises=RecursionError, strict=True
 )
 def test_very_deep_expressions(expression):
-    Calculator(expression).calculate
+    Calculator(expression).calculate()
