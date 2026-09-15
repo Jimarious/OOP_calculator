@@ -37,6 +37,7 @@ def test_failed_update_preserves_state(calculator):
     assert (calculator.expression, calculator.calculate()) == ("2 + 3 * 4", 14)
     calculator.expression = '4'
 
+
 def demonstrate_fixture_session(calculator):
     assert calculator.calculate() == '4'
 
