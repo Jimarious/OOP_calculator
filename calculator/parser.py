@@ -4,6 +4,7 @@ from .nodes import _Operation, _Number, _Negation
 FLOAT = r"\d+\.\d+"
 INT = r"\d+"
 
+
 class _Parser:
     def __init__(self, expression):
         self._tokens = findall(rf"{FLOAT}|{INT}|[*/+\-()]|\S", expression)

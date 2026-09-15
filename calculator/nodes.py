@@ -1,10 +1,11 @@
 from abc import ABC, abstractmethod
-import math
+
 
 class _Node(ABC):
     @abstractmethod
     def evaluate(self):
         pass
+
 
 class _Number(_Node):
     def __init__(self, value):

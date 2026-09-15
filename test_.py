@@ -44,8 +44,7 @@ def test_failed_update_preserves_state(calculator):
     "+".join(["1"] * sys.getrecursionlimit()),
     ], ids=["parentheses", "operators"])
 @pytest.mark.xfail(
-    raises=RecursionError, strict=True,
-    reason="Recursive parsing/evaluation exceeds Python's recursion limit",
+    raises=RecursionError, strict=True
 )
 def test_very_deep_expressions(expression):
-    Calculator(expression).calculate()
+    Calculator(expression).calculate
