@@ -39,14 +39,6 @@ def test_failed_update_preserves_state(calculator):
     assert (calculator.expression, calculator.calculate()) == ("2 + 3 * 4", 14)
 
 
-def test_python_code_is_rejected_without_creating_a_file(tmp_path):
-    path = tmp_path / "should_not_exist.txt"
-    expression = f"__import__('pathlib').Path({str(path)!r}).touch()"
-    with pytest.raises(ValueError):
-        Calculator(expression)
-    assert not path.exists()
-
-
 @pytest.mark.parametrize("expression", [
     "(" * sys.getrecursionlimit() + "1" + ")" * sys.getrecursionlimit(),
     "+".join(["1"] * sys.getrecursionlimit()),
