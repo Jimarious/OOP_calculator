@@ -1,8 +1,9 @@
 import pytest
 from calculator import Calculator
+import sys
 
 
-@pytest.fixture(scope="session")
+@pytest.fixture()
 def calculator():
     return Calculator("2 + 3 * 4")
 
@@ -43,3 +44,15 @@ def test_python_code_is_rejected_without_creating_a_file(tmp_path):
     with pytest.raises(ValueError):
         Calculator(expression)
     assert not path.exists()
+
+
+@pytest.mark.parametrize("expression", [
+    "(" * (sys.getrecursionlimit()+1) + "1" + ")" * (sys.getrecursionlimit()+1),
+    "+".join(["1"] * (sys.getrecursionlimit()+1)),
+    ], ids=["parentheses", "operators"])
+@pytest.mark.xfail(
+    raises=RecursionError, strict=True,
+    reason="Recursive parsing/evaluation exceeds Python's recursion limit",
+)
+def test_very_deep_expressions(expression):
+    Calculator(expression).calculate()
