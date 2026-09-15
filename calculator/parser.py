@@ -1,5 +1,5 @@
 from re import findall, fullmatch
-from .nodes import _Node, _Operation, _Number
+from .nodes import _Operation, _Number, _Negation
 
 FLOAT = r"\d+\.\d+"
 INT = r"\d+"
@@ -44,12 +44,19 @@ class Parser:
             node = _Operation(operator, node, self._parse_atom())
         return node
 
+    def _parse_negation(self):
+        print("_parse_negation:", self._tokens, self._token_idx)
+        return _Negation(self._parse_atom())
+        # TODO: Doesnt parse atom run here?
+
     def _parse_atom(self):
-        if (token := self._take()) == '(':
+        if (token := self._take()) == '-': return self._parse_negation()
+        if token == '(':
             node = self._parse_sum()
             if self._take() == ')': return node
             raise ValueError("expression missing closing )")
         else:
-            if fullmatch(FLOAT, token): return _Number(float(token))
+            if fullmatch(FLOAT, token):return _Number(float(token))
             if fullmatch(INT, token): return _Number(int(token))
             raise ValueError(f"in expression expected number or (, got {token!r}")
+

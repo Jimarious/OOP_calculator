@@ -8,8 +8,7 @@ class _Node(ABC):
 
 class _Number(_Node):
     def __init__(self, value):
-        # Already handled by Parser, just to showcase isinstance
-        # (bool is child of int)
+        # Already handled by Parser, just to showcase the catch with isinstance
         # type(value) not in {int, float}: would have removed the need to check for bool
         if not isinstance(value, (int, float)) or isinstance(value, bool):
             raise TypeError("_Number <- non numeric value")
@@ -37,3 +36,11 @@ class _Operation(_Node):
                 return left * right
             case '/':
                 return left / right
+
+
+class _Negation(_Node):
+    def __init__(self, node):
+        self._node = node
+
+    def evaluate(self):
+        return -self._node.evaluate()
