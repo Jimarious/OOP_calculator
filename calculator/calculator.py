@@ -17,3 +17,6 @@ class Calculator:
 
     def calculate(self):
         return self._root.evaluate()
+
+# TODO: Maybe count recursion depth
+# TODO: Is there any built in recursion depth variable you could use?
