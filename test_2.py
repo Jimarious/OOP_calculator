@@ -1,7 +1,18 @@
-# write a fixture to have a loaded calculator
+"""
+import pytest
+from calculator import Calculator
+
+@pytest.fixture
+def calculator():
+    return Calculator("...").calculate()
 
 # write a parametrize and check floats and precision
+@pytest.mark.parametrize(("expression", "value"), [
+    ("0.2+0.3",pytest.approx(0.5))
+    ])
+2^
 
+"""
 # write some invalid syntax
 
 # state after failed update

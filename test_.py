@@ -3,7 +3,7 @@ from calculator import Calculator
 import sys
 
 
-@pytest.fixture()
+@pytest.fixture() # Just hanging around calculator
 def calculator():
     return Calculator("2 + 3 * 4")
 
@@ -15,7 +15,8 @@ def calculator():
     ("-0.2 * 0.3", pytest.approx(-0.06)),
     ("-(2 + 0.3)", pytest.approx(-2.3)),
     ("2--3", 5),
-    ("9007199254740993 - 9007199254740992", 1),
+    # float => problem, int: arbitrary precision
+    ("9007199254740993 - 9007199254740992", 1), 
 ])
 def test_calculate(expression, expected):
     assert Calculator(expression).calculate() == expected
@@ -47,8 +48,8 @@ def test_python_code_is_rejected_without_creating_a_file(tmp_path):
 
 
 @pytest.mark.parametrize("expression", [
-    "(" * (sys.getrecursionlimit()+1) + "1" + ")" * (sys.getrecursionlimit()+1),
-    "+".join(["1"] * (sys.getrecursionlimit()+1)),
+    "(" * sys.getrecursionlimit() + "1" + ")" * sys.getrecursionlimit(),
+    "+".join(["1"] * sys.getrecursionlimit()),
     ], ids=["parentheses", "operators"])
 @pytest.mark.xfail(
     raises=RecursionError, strict=True,
