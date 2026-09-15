@@ -35,11 +35,6 @@ def test_failed_update_preserves_state(calculator):
     with pytest.raises(ValueError):
         calculator.expression = "1 +"
     assert (calculator.expression, calculator.calculate()) == ("2 + 3 * 4", 14)
-    calculator.expression = '4'
-
-
-def demonstrate_fixture_session(calculator):
-    assert calculator.calculate() == '4'
 
 
 def test_python_code_is_rejected_without_creating_a_file(tmp_path):
