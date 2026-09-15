@@ -48,14 +48,14 @@ def test_update_preserves_text_and_instance_isolation(self, calculator):
 @pytest.mark.parametrize("value, error", [
     (None, TypeError), ("", ValueError), ("1 +", ValueError),
 ])
-def test_failed_update_preserves_state(self, calculator, value, error):
+def test_failed_update_preserves_state(calculator, value, error):
     with pytest.raises(error):
         calculator.expression = value
     assert calculator.expression == "2 + 3 * 4"
     assert calculator.calculate() == 14
 
 @pytest.mark.parametrize("expression", ["1 / 0", "1 / (2 - 2)"])
-def test_division_by_zero_and_recovery(self, calculator, expression):
+def test_division_by_zero_and_recovery(calculator, expression):
     calculator.expression = expression
     with pytest.raises(ZeroDivisionError):
         calculator.calculate()
@@ -64,7 +64,7 @@ def test_division_by_zero_and_recovery(self, calculator, expression):
 
 
 def test_calculate_reuses_parsed_tree(calculator, monkeypatch):
-    def unexpected_parse(self):
+    def unexpected_parse():
         pytest.fail("calculate() should reuse the existing parsed expression")
 
     monkeypatch.setattr(_Parser, "parse", unexpected_parse)
