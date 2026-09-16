@@ -3,9 +3,10 @@ from calculator import Calculator
 import sys
 
 
-@pytest.fixture() # Just hanging around calculator
-def calculator():
-    return Calculator("2 + 3 * 4")
+@pytest.fixture
+def deep_expressions():
+    n = sys.getrecursionlimit()
+    return "(" * n + "1" + ")" * n, "+".join(["1"] * n)
 
 
 @pytest.mark.parametrize("expression, expected", [
@@ -33,18 +34,21 @@ def test_invalid_syntax_is_rejected(expression):
         Calculator(expression)
 
 
-def test_failed_update_preserves_state(calculator):
+def test_failed_update_preserves_state():
     with pytest.raises(ValueError):
+        calculator = Calculator("2 + 3 * 4")
         calculator.expression = "1 +"
     assert (calculator.expression, calculator.calculate()) == ("2 + 3 * 4", 14)
 
 
-@pytest.mark.parametrize("expression", [
-    "(" * sys.getrecursionlimit() + "1" + ")" * sys.getrecursionlimit(),
-    "+".join(["1"] * sys.getrecursionlimit()),
-    ], ids=["parentheses", "operators"])
-@pytest.mark.xfail(
-    raises=RecursionError, strict=True
-)
-def test_very_deep_expressions(expression):
-    Calculator(expression).calculate()
+xfail = pytest.mark.xfail(raises=RecursionError, strict=True)
+@pytest.mark.parametrize("i, calculate", [
+    pytest.param(0, False, marks=xfail, id="parentheses"),
+    pytest.param(0, True,  marks=xfail, id="parentheses-calculate"),
+    pytest.param(1, False,              id="operators"),
+    pytest.param(1, True,  marks=xfail, id="operators-calculate"),
+])
+def test_very_deep_expressions(deep_expressions, i, calculate):
+    calculator = Calculator(deep_expressions[i])
+    if calculate:
+        calculator.calculate()

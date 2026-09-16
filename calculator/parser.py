@@ -48,7 +48,6 @@ class _Parser:
     def _parse_negation(self):
         print("_parse_negation:", self._tokens, self._token_idx)
         return _Negation(self._parse_atom())
-        # TODO: Doesnt parse atom run here?
 
     def _parse_atom(self):
         if (token := self._take()) == '-': return self._parse_negation()

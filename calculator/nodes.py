@@ -1,7 +1,7 @@
 from abc import ABC, abstractmethod
 
 
-class _Node(ABC):
+class _Node(ABC): # not required for polymorphism
     @abstractmethod
     def evaluate(self):
         pass
